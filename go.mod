@@ -1,4 +1,4 @@
-module example/hello
+module github.com/jforseth210/CarrollCalendarParser
 
 go 1.22.0
 
