@@ -49,7 +49,7 @@ func main() {
 	go func() {
 		<-c
 		// Don't overwrite an existing complete calendar if it exists
-		os.WriteFile("carroll.ics.part", []byte(cal.Serialize()), 0755)
+		os.WriteFile("carroll.ics.part", []byte(cal.Serialize()), 0655)
 		println("Program interrupted, saved incomplete calendar as carroll.ics.part")
 		os.Exit(1)
 	}()
