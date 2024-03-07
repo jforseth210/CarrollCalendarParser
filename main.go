@@ -133,7 +133,7 @@ func getEventLinksFromHTML(doc *goquery.Document) []string {
 		// Make sure it hasn't been added already
 		// (There are multiple links to multi-day events)
 		for _, existingLink := range links {
-			if existingLink == relativeLink {
+			if existingLink == "https://www.carroll.edu"+relativeLink {
 				return
 			}
 		}
@@ -165,8 +165,9 @@ func parseStartTime(doc *goquery.Document) (*time.Time, error) {
 	var unixString string
 	var exists bool
 	dates.Each(func(i int, date *goquery.Selection) {
-		unixString, exists = date.Attr("datetime")
-		return
+		if i == 0 {
+			unixString, exists = date.Attr("datetime")
+		}
 	})
 	// Parse
 	if !exists {
