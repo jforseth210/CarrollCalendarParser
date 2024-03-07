@@ -18,6 +18,10 @@ import (
 	"golang.org/x/text/language"
 )
 
+// Author: Justin Forseth 
+// Downloads html from Carroll College calendar and
+// parses it into an ics file 
+
 func main() {
 	// Validate argument length
 	if len(os.Args) != 3 {
