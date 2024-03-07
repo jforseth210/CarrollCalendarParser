@@ -96,9 +96,10 @@ func main() {
 		}
 	}
 
-	// Write out all the events to a file 
+	// Write out all the events to a file
 	os.WriteFile("carroll.ics", []byte(cal.Serialize()), 0755)
 }
+
 // Loads a page from a URL and parses the HTML
 func loadPage(url string) (*goquery.Document, error) {
 	resp, err := http.Get(url)
@@ -115,7 +116,7 @@ func getEventLinksFromHTML(doc *goquery.Document) []string {
 	anchorTags := doc.Find("table a")
 
 	var links []string
-	
+
 	// Iterate through the event links
 	anchorTags.Each(func(i int, anchorTag *goquery.Selection) {
 		// Get the href attribute of the anchor tag
@@ -159,10 +160,15 @@ func parseTitle(doc *goquery.Document) string {
 func parseStartTime(doc *goquery.Document) (*time.Time, error) {
 	// Find the date area
 	dates := doc.Find(".event__date").Find("time")
+
 	// Find the start date
-	date := dates.Children().First()
-	// Parse 
-	unixString, exists := date.Attr("datetime")
+	var unixString string
+	var exists bool
+	dates.Each(func(i int, date *goquery.Selection) {
+		unixString, exists = date.Attr("datetime")
+		return
+	})
+	// Parse
 	if !exists {
 		return nil, errors.New("No start time found")
 	}
@@ -174,9 +180,16 @@ func parseStartTime(doc *goquery.Document) (*time.Time, error) {
 	return &tm, nil
 }
 func parseEndTime(doc *goquery.Document) (*time.Time, error) {
+	// Find the date area
 	dates := doc.Find(".event__date").Find("time")
-	date := dates.Children().Last()
-	unixString, exists := date.Attr("datetime")
+
+	//Find the end date
+	var unixString string
+	var exists bool
+	dates.Each(func(i int, date *goquery.Selection) {
+		unixString, exists = date.Attr("datetime")
+	})
+
 	if !exists {
 		return nil, errors.New("No end time found")
 	}
